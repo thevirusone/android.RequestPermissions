@@ -1,0 +1,31 @@
+machine:
+  java:
+    version: oraclejdk8
+  environment:
+    ANDROID_HOME: /usr/local/android-sdk-linux
+    JAVA_OPTS: "-Xms512m -Xmx1024m"
+
+dependencies:
+  pre:
+    - echo y | android update sdk --no-ui --all --filter "android-25,build-tools-25.0.2"
+  override:
+    - ./gradlew dependencies
+
+test:
+  override:
+    - ./gradlew build
+    - ./gradlew test
+  post:
+    - cp -r app/build/test-results/* $CIRCLE_TEST_REPORTS
+
+deployment:
+  develop:
+    branch: develop
+    commands:
+      - ./gradlew assembleRelease
+      - cp -r project-name/build/outputs $CIRCLE_ARTIFACTS
+  production:
+    branch: master
+    commands:
+      - ./gradlew assembleRelease
+      - cp -r project-name/build/outputs $CIRCLE_ARTIFACTS
