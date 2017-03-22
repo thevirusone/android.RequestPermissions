@@ -1,0 +1,38 @@
+machine:
+  java:
+    version: oraclejdk8
+  environment:
+    ANDROID_HOME: /usr/local/android-sdk-linux
+    JAVA_OPTS: "-Xms512m -Xmx1024m"
+
+checkout:
+  post:
+    - cp local.properties.ci local.properties
+
+dependencies:
+  pre:
+    - echo y | android update sdk --no-ui --all --filter "android-25,build-tools-25.0.2"
+    - mkdir -p $ANDROID_HOME/licenses
+    - echo -e "8933bad161af4178b1185d1a37fbf41ea5269c55" > $ANDROID_HOME/licenses/android-sdk-license
+    - echo -e "84831b9409646a918e30573bab4c9c91346d8abd" > $ANDROID_HOME/licenses/android-sdk-preview-license
+    - openssl aes-256-cbc -d -in secret-env-cipher -k $KEY >> ~/.circlerc
+  override:
+    - ./gradlew dependencies
+test:
+  override:
+    - ./gradlew build
+    - ./gradlew test
+  post:
+    - cp -r app/build/test-results/* $CIRCLE_TEST_REPORTS
+
+deployment:
+  develop:
+    branch: develop
+    commands:
+      - ./gradlew assembleRelease
+      - cp -r project-name/build/outputs $CIRCLE_ARTIFACTS
+  production:
+    branch: master
+    commands:
+      - ./gradlew assembleRelease
+      - cp -r project-name/build/outputs $CIRCLE_ARTIFACTS
