@@ -30,7 +30,7 @@ deployment:
     branch: develop
     commands:
       - ./gradlew assembleRelease
-      - cp -r app/build/outputs/ $CIRCLE_ARTIFACTS
+      - cp -r app/build/outputs $CIRCLE_ARTIFACTS
   production:
     branch: master
     commands:
