@@ -15,8 +15,8 @@ dependencies:
     - mkdir -p $ANDROID_HOME/licenses
     - echo -e "8933bad161af4178b1185d1a37fbf41ea5269c55" > $ANDROID_HOME/licenses/android-sdk-license
     - echo -e "84831b9409646a918e30573bab4c9c91346d8abd" > $ANDROID_HOME/licenses/android-sdk-preview-license
+    - openssl aes-256-cbc -d -in secret-env-cipher -k $KEY >> ~/.circlerc
   override:
-    - "echo RELEASE_STORE_PASSWORD: $RELEASE_STORE_PASSWORD RELEASE_KEY_ALIAS: $RELEASE_KEY_ALIAS RELEASE_KEY_PASSWORD: $RELEASE_KEY_PASSWORD"
     - ./gradlew dependencies
 test:
   override:
