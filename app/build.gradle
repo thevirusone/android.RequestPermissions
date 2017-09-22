@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'android-apt'
 android {
     compileSdkVersion 25
     buildToolsVersion '25.0.2'
@@ -15,8 +14,12 @@ android {
         versionName "1.0"
     }
 
-    signingConfigs {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
+    signingConfigs {
         dev {
             storeFile rootProject.file("debug.jks")
             storePassword "android"
@@ -25,7 +28,7 @@ android {
         }
         release {
             storeFile rootProject.file('release.jks')
-            storePassword  properties.getProperty("RELEASE_STORE_PASSWORD", System.getenv("RELEASE_STORE_PASSWORD"))
+            storePassword properties.getProperty("RELEASE_STORE_PASSWORD", System.getenv("RELEASE_STORE_PASSWORD"))
             keyAlias properties.getProperty("RELEASE_KEY_ALIAS", System.getenv("RELEASE_KEY_ALIAS"))
             keyPassword properties.getProperty("RELEASE_KEY_PASSWORD", System.getenv("RELEASE_KEY_PASSWORD"))
         }
@@ -45,16 +48,25 @@ android {
             debuggable false
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.3.0'
+    compile 'com.android.support:appcompat-v7:25.4.0'
 
-    compile 'com.github.hotchemi:permissionsdispatcher:2.0.8'
-    apt 'com.github.hotchemi:permissionsdispatcher-processor:2.0.8'
+    compile("com.github.hotchemi:permissionsdispatcher:3.0.1") {
+        exclude module: "support-v13"
+    }
+    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:3.0.1"
 
-    compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.jakewharton.timber:timber:4.1.1'
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    compile 'com.jakewharton.timber:timber:4.5.1'
 }
