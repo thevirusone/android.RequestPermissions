@@ -2,6 +2,7 @@ package io.github.yamacraft.requestpermissions;
 
 import android.Manifest;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
@@ -22,57 +23,56 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
     @OnClick(R.id.calendar_button)
     protected void onClickCalendarButton() {
-        MainActivityPermissionsDispatcher.needsPermissionReadCalendarWithCheck(this);
+        MainActivityPermissionsDispatcher.needsPermissionReadCalendarWithPermissionCheck(this);
     }
 
     @OnClick(R.id.camera_button)
     protected void onClickCameraButton() {
-        MainActivityPermissionsDispatcher.needsPermissionCameraWithCheck(this);
+        MainActivityPermissionsDispatcher.needsPermissionCameraWithPermissionCheck(this);
     }
 
     @OnClick(R.id.contacts_button)
     protected void onClickContactsButton() {
-        MainActivityPermissionsDispatcher.needsPermissionGetAccountsWithCheck(this);
+        MainActivityPermissionsDispatcher.needsPermissionGetAccountsWithPermissionCheck(this);
     }
 
     @OnClick(R.id.location_button)
     protected void onClickLocationButton() {
-        MainActivityPermissionsDispatcher.needsPermissionAccessFineLocationWithCheck(this);
+        MainActivityPermissionsDispatcher.needsPermissionAccessFineLocationWithPermissionCheck(this);
     }
 
     @OnClick(R.id.microphone_button)
     protected void onClickMicrophoneButton() {
-        MainActivityPermissionsDispatcher.needsPermissionRecordAudioWithCheck(this);
+        MainActivityPermissionsDispatcher.needsPermissionRecordAudioWithPermissionCheck(this);
     }
 
     @OnClick(R.id.phone_button)
     protected void onClickPhoneButton() {
-        MainActivityPermissionsDispatcher.needsPermissionReadCallLogWithCheck(this);
+        MainActivityPermissionsDispatcher.needsPermissionReadCallLogWithPermissionCheck(this);
     }
 
     @OnClick(R.id.sensors_button)
     protected void onClickSensorsButton() {
-        MainActivityPermissionsDispatcher.needsPermissionBodySensorsWithCheck(this);
+        MainActivityPermissionsDispatcher.needsPermissionBodySensorsWithPermissionCheck(this);
     }
 
     @OnClick(R.id.sms_button)
     protected void onClickSmsButton() {
-        MainActivityPermissionsDispatcher.needsPermissionSendSmsWithCheck(this);
+        MainActivityPermissionsDispatcher.needsPermissionSendSmsWithPermissionCheck(this);
         Timber.i("Click To Sms");
     }
 
     @OnClick(R.id.storage_button)
     protected void onClickStorageButton() {
-        MainActivityPermissionsDispatcher.needsPermissionReadExternalStoragesWithCheck(this);
+        MainActivityPermissionsDispatcher.needsPermissionReadExternalStoragesWithPermissionCheck(this);
     }
-
 
     @NeedsPermission(Manifest.permission.READ_CALENDAR)
     protected void needsPermissionReadCalendar() {
