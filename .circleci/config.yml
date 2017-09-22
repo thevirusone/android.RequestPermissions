@@ -1,0 +1,35 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: circleci/android:api-26-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
+    working_directory: ~/code
+    steps:
+      - checkout
+      - run:
+          name: Build Settings
+          command: |
+            echo >> local.properties
+            mkdir -p $ANDROID_HOME/licenses
+            echo y | android update sdk --no-ui --all --filter "build-tools-25.0.2"
+            echo y | android update sdk --no-ui --all --filter "extra-android-m2repository,extra-google-m2repository"
+            openssl aes-256-cbc -d -in secret-env-cipher -k $KEY >> $BASH_ENV
+      - run:
+          name: dependencies
+          command: |
+            ./gradlew dependencies
+      - run:
+          name: build and test
+          command: |
+            ./gradlew build test
+      - store_artifacts:
+          path: app/build/outputs/apk/dev/app-dev.apk
+          destination: app-debug.apk
+      - store_artifacts:
+          path: app/build/outputs/apk/release/app-release.apk
+          destination: app-release.apk
+      - store_test_results:
+          path: app/build/test-results
