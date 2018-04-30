@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+  app_build:
+    build:
+      dockerfile: build.dockerfile
+    environment:
+      - KEY=sA1EKahokT
+    
